@@ -1,0 +1,2121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能推广数据分析仪表盘</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-light: #60a5fa;
+            --primary-dark: #2563eb;
+            --secondary: #10b981;
+            --secondary-light: #34d399;
+            --warning: #f59e0b;
+            --warning-light: #fbbf24;
+            --danger: #ef4444;
+            --danger-light: #f87171;
+            --success: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --border: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius: 1rem;
+            --radius-sm: 0.5rem;
+            --radius-md: 0.75rem;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 98vw;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 95vh;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* 头部样式 */
+        .header {
+            background: var(--gradient-primary);
+            padding: 1.75rem 2.5rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .header-title i {
+            font-size: 2.25rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.875rem;
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header-title h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-subtitle {
+            opacity: 0.9;
+            font-size: 1rem;
+            font-weight: 300;
+            margin-left: 4.5rem;
+        }
+
+        /* 统计卡片区域 */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem 2.5rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.75rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .stat-card:nth-child(2)::before {
+            background: var(--gradient-success);
+        }
+
+        .stat-card:nth-child(3)::before {
+            background: var(--gradient-warning);
+        }
+
+        .stat-card:nth-child(4)::before {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+
+        .stat-card:nth-child(5)::before {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: white;
+            background: var(--gradient-primary);
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            background: var(--gradient-success);
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            background: var(--gradient-warning);
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+
+        .stat-card:nth-child(5) .stat-icon {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card:nth-child(2) .stat-value {
+            background: linear-gradient(135deg, var(--secondary) 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card:nth-child(3) .stat-value {
+            background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card:nth-child(4) .stat-value {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card:nth-child(5) .stat-value {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.9375rem;
+            color: var(--gray-600);
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-description {
+            font-size: 0.8125rem;
+            color: var(--gray-500);
+            opacity: 0.8;
+        }
+
+        /* 工具栏 */
+        .toolbar {
+            background: white;
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            background: white;
+            color: var(--dark);
+            border: 2px solid var(--gray-200);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 粘贴区域 */
+        .paste-section {
+            padding: 2.5rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .paste-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .paste-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .paste-area {
+            border: 3px dashed var(--primary-light);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            text-align: center;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .paste-area:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .paste-area i {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .paste-area h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .paste-area p {
+            color: var(--gray-500);
+            font-size: 1rem;
+            max-width: 500px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+        }
+
+        .shortcut-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 2rem;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+        }
+
+        .image-preview {
+            border: 3px solid var(--primary-light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            background: white;
+            box-shadow: var(--shadow-lg);
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .image-preview h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .preview-image {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: var(--radius-sm);
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+        }
+
+        .preview-image img {
+            max-width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+        }
+
+        .ocr-progress {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            text-align: center;
+        }
+
+        /* 过滤面板 */
+        .filter-panel {
+            background: white;
+            padding: 1.75rem 2.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .filter-label {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.75rem;
+            font-size: 0.9375rem;
+        }
+
+        .filter-label i {
+            color: var(--primary);
+        }
+
+        .excel-filter-btn {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            font-size: 0.9375rem;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            position: relative;
+            min-height: 56px;
+        }
+
+        .excel-filter-btn:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .excel-filter-btn.active {
+            border-color: var(--primary);
+            background: var(--gray-50);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .filter-selected-count {
+            background: var(--primary);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 1rem;
+            margin-left: 0.5rem;
+            min-width: 1.5rem;
+            text-align: center;
+            display: inline-block;
+        }
+
+        /* 表格区域 */
+        .table-section {
+            flex: 1;
+            padding: 2rem;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        .table-container {
+            flex: 1;
+            overflow: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: white;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 900px;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+            padding: 1.25rem 1rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            color: var(--gray-800);
+            border-bottom: 2px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition);
+        }
+
+        th:hover {
+            background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+        }
+
+        th.sorted i {
+            color: var(--primary);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--gray-100);
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.02) 0%, rgba(139, 92, 246, 0.02) 100%);
+        }
+
+        td {
+            padding: 1.25rem 1rem;
+            font-size: 0.9375rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        /* 总计行 */
+        .total-row {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe) !important;
+            font-weight: 700;
+            position: sticky;
+            bottom: 0;
+            z-index: 5;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .total-row td {
+            border-top: 3px solid var(--primary);
+            border-bottom: none;
+            font-size: 0.95rem;
+            color: var(--gray-800);
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        }
+
+        /* 状态样式 */
+        .low-register {
+            background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+            color: #92400e;
+            font-weight: 600;
+        }
+
+        .low-firstrecharge {
+            background: linear-gradient(135deg, #fee2e2, #fecaca) !important;
+            color: #991b1b;
+            font-weight: 600;
+        }
+
+        .high-register {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0) !important;
+            color: #065f46;
+            font-weight: 600;
+        }
+
+        .high-firstrecharge {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0) !important;
+            color: #065f46;
+            font-weight: 600;
+        }
+
+        .status-cell {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            text-align: center;
+            display: inline-block;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .status-优秀 {
+            background: var(--gradient-success);
+            color: white;
+        }
+
+        .status-正常 {
+            background: linear-gradient(135deg, #6b7280, #9ca3af);
+            color: white;
+        }
+
+        .status-需优化 {
+            background: var(--gradient-warning);
+            color: white;
+        }
+
+        /* 加载动画 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .loading-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .spinner {
+            width: 70px;
+            height: 70px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary);
+            border-right: 4px solid var(--success);
+            border-bottom: 4px solid var(--warning);
+            animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 通知 */
+        .notification {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 1.25rem 1.75rem;
+            border-radius: var(--radius-md);
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--shadow-xl);
+            z-index: 1000;
+            animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .notification-success {
+            background: var(--gradient-success);
+        }
+
+        .notification-error {
+            background: var(--gradient-danger);
+        }
+
+        .notification-info {
+            background: var(--gradient-primary);
+        }
+
+        .notification-warning {
+            background: var(--gradient-warning);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%) scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* 页脚 */
+        .footer {
+            padding: 1.5rem 2.5rem;
+            text-align: center;
+            color: var(--gray-500);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border);
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-stats {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.8125rem;
+        }
+
+        .footer-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-stat i {
+            color: var(--primary);
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 5px;
+            border: 2px solid var(--gray-100);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-400);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .stats-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .filter-panel {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 0.5rem;
+            }
+            
+            .header, .stats-cards, .paste-section, .filter-panel, .table-section {
+                padding: 1.25rem;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .header-title {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .header-title i {
+                font-size: 2rem;
+            }
+            
+            .header-title h1 {
+                font-size: 1.5rem;
+            }
+            
+            .header-subtitle {
+                margin-left: 0;
+                text-align: center;
+            }
+            
+            .btn {
+                padding: 0.75rem 1.25rem;
+                font-size: 0.875rem;
+            }
+            
+            table {
+                min-width: 800px;
+            }
+        }
+
+        /* 工具提示 */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background: linear-gradient(135deg, var(--gray-800), var(--gray-900));
+            color: white;
+            text-align: center;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8125rem;
+            line-height: 1.4;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-title">
+                    <i class="fas fa-chart-network"></i>
+                    <div>
+                        <h1>智能推广数据分析仪表盘</h1>
+                        <div class="header-subtitle">高级OCR识别 • 精准数据分析 • 实时统计汇总</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 统计卡片 -->
+        <section class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <div class="stat-value" id="total-installs">0</div>
+                <div class="stat-label">总安装</div>
+                <div class="stat-description">累计安装总量</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="stat-value" id="total-registers">0</div>
+                <div class="stat-label">总注册</div>
+                <div class="stat-description">累计注册总量</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="stat-value" id="total-recharges">0</div>
+                <div class="stat-label">总首充</div>
+                <div class="stat-description">累计首充总量</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-percentage"></i>
+                </div>
+                <div class="stat-value" id="register-rate">0%</div>
+                <div class="stat-label">注册率</div>
+                <div class="stat-description">注册/安装转化率</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-value" id="recharge-rate">0%</div>
+                <div class="stat-label">首充率</div>
+                <div class="stat-description">首充/注册转化率</div>
+            </div>
+        </section>
+
+        <!-- 工具栏 -->
+        <div class="toolbar">
+            <button class="btn btn-primary" id="pasteImageBtn">
+                <i class="fas fa-paste"></i> 粘贴图片数据 (Ctrl+V)
+            </button>
+            <button class="btn btn-success" id="importDataBtn">
+                <i class="fas fa-file-import"></i> 导入示例数据
+            </button>
+            <button class="btn btn-outline" id="exportDataBtn">
+                <i class="fas fa-file-export"></i> 导出CSV
+            </button>
+            <button class="btn btn-danger" id="clearDataBtn">
+                <i class="fas fa-trash-alt"></i> 清除数据
+            </button>
+        </div>
+
+        <!-- 粘贴区域 -->
+        <section class="paste-section">
+            <div class="paste-container">
+                <div class="paste-area" id="pasteArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>拖放或粘贴推广活动数据图片</h3>
+                    <p>支持表格截图、数据报表图片等，系统将自动识别图片中的推广活动数据</p>
+                    <div class="shortcut-hint">
+                        <i class="fas fa-keyboard"></i>
+                        <span>快捷键: Ctrl + V | 或直接拖放图片文件</span>
+                    </div>
+                </div>
+                
+                <div class="image-preview" id="imagePreview">
+                    <h3><i class="fas fa-image"></i> 图片预览</h3>
+                    <div class="preview-image" id="previewImage">
+                        <div style="text-align: center; color: var(--gray-400);">
+                            <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                            <p>图片将在此处显示</p>
+                        </div>
+                    </div>
+                    <div class="ocr-progress" id="ocrProgress" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">正在初始化OCR引擎...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 过滤面板 -->
+        <section class="filter-panel">
+            <div class="filter-group">
+                <div class="filter-label">
+                    <i class="fas fa-filter"></i>
+                    <span>系列名称筛选</span>
+                </div>
+                <button class="excel-filter-btn" id="seriesFilterBtn">
+                    <span>
+                        选择系列名称
+                        <span class="filter-selected-count" id="seriesSelectedCount">0</span>
+                    </span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+            
+            <div class="filter-group">
+                <div class="filter-label">
+                    <i class="fas fa-percentage"></i>
+                    <span>注册率筛选</span>
+                </div>
+                <select class="excel-filter-btn" id="registerFilter" style="appearance: none; cursor: pointer;">
+                    <option value="all">全部</option>
+                    <option value="high">优秀 (>65%)</option>
+                    <option value="normal">正常 (60-65%)</option>
+                    <option value="low">需优化 (<60%)</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <div class="filter-label">
+                    <i class="fas fa-chart-line"></i>
+                    <span>首充率筛选</span>
+                </div>
+                <select class="excel-filter-btn" id="rechargeFilter" style="appearance: none; cursor: pointer;">
+                    <option value="all">全部</option>
+                    <option value="high">优秀 (>60%)</option>
+                    <option value="normal">正常 (55-60%)</option>
+                    <option value="low">需优化 (<55%)</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; align-items: flex-end;">
+                <button class="btn" id="clearFiltersBtn">
+                    <i class="fas fa-broom"></i> 清除筛选
+                </button>
+            </div>
+        </section>
+
+        <!-- 表格区域 -->
+        <section class="table-section">
+            <div class="table-container">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>系列名称 <i class="fas fa-sort"></i></th>
+                            <th>安装 <i class="fas fa-sort"></i></th>
+                            <th>注册 <i class="fas fa-sort"></i></th>
+                            <th>首充 <i class="fas fa-sort"></i></th>
+                            <th>注册率 <i class="fas fa-sort"></i></th>
+                            <th>首充率 <i class="fas fa-sort"></i></th>
+                            <th>状态 <i class="fas fa-sort"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr id="noDataRow">
+                            <td colspan="7" style="text-align: center; padding: 4rem; color: var(--gray-400);">
+                                <i class="fas fa-database" style="font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.1; display: block;"></i>
+                                <h3 style="margin-bottom: 0.75rem; font-size: 1.5rem; color: var(--gray-500);">等待数据输入</h3>
+                                <p style="font-size: 1rem; max-width: 500px; margin: 0 auto; line-height: 1.6;">
+                                    请粘贴包含推广活动数据的图片，系统将自动识别并分析表格数据
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <div class="footer-stats">
+                <div class="footer-stat">
+                    <i class="fas fa-database"></i>
+                    <span>总数据: <span id="totalDataCount">0</span> 行</span>
+                </div>
+                <div class="footer-stat">
+                    <i class="fas fa-filter"></i>
+                    <span>筛选结果: <span id="filteredDataCount">0</span> 行</span>
+                </div>
+            </div>
+            <p>© 2025 智能推广数据分析系统 | 基于高级OCR技术 | 数据安全本地处理</p>
+        </footer>
+    </div>
+
+    <!-- 加载动画 -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div style="color: white; text-align: center;">
+            <div id="loadingText" style="font-size: 1.125rem; margin-bottom: 0.5rem;">正在处理图片数据...</div>
+            <div style="font-size: 0.9375rem; opacity: 0.9;">请稍候，正在使用高级OCR引擎识别...</div>
+        </div>
+    </div>
+
+    <!-- 引入Tesseract.js -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.0/dist/tesseract.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化变量
+            let promotionData = [];
+            let filteredData = [];
+            let currentSortColumn = -1;
+            let currentSortDirection = 'asc';
+            let selectedSeries = new Set();
+            
+            // OCR Worker实例
+            let ocrWorker = null;
+            
+            // 元素引用
+            const elements = {
+                // 统计卡片
+                totalInstalls: document.getElementById('total-installs'),
+                totalRegisters: document.getElementById('total-registers'),
+                totalRecharges: document.getElementById('total-recharges'),
+                registerRate: document.getElementById('register-rate'),
+                rechargeRate: document.getElementById('recharge-rate'),
+                
+                // 工具栏
+                pasteArea: document.getElementById('pasteArea'),
+                pasteImageBtn: document.getElementById('pasteImageBtn'),
+                importDataBtn: document.getElementById('importDataBtn'),
+                exportDataBtn: document.getElementById('exportDataBtn'),
+                clearDataBtn: document.getElementById('clearDataBtn'),
+                clearFiltersBtn: document.getElementById('clearFiltersBtn'),
+                
+                // 图片预览
+                imagePreview: document.getElementById('imagePreview'),
+                previewImage: document.getElementById('previewImage'),
+                ocrProgress: document.getElementById('ocrProgress'),
+                progressFill: document.getElementById('progressFill'),
+                progressText: document.getElementById('progressText'),
+                
+                // 加载
+                loadingOverlay: document.getElementById('loadingOverlay'),
+                loadingText: document.getElementById('loadingText'),
+                
+                // 表格
+                tableBody: document.getElementById('tableBody'),
+                noDataRow: document.getElementById('noDataRow'),
+                
+                // 筛选
+                seriesFilterBtn: document.getElementById('seriesFilterBtn'),
+                seriesSelectedCount: document.getElementById('seriesSelectedCount'),
+                registerFilter: document.getElementById('registerFilter'),
+                rechargeFilter: document.getElementById('rechargeFilter'),
+                
+                // 统计
+                totalDataCount: document.getElementById('totalDataCount'),
+                filteredDataCount: document.getElementById('filteredDataCount')
+            };
+            
+            // 初始化事件监听器
+            initEventListeners();
+            
+            // 初始化OCR引擎
+            initOCREngine();
+            
+            function initEventListeners() {
+                // 粘贴区域点击事件
+                elements.pasteArea.addEventListener('click', () => elements.pasteImageBtn.click());
+                
+                // 粘贴图片按钮
+                elements.pasteImageBtn.addEventListener('click', function() {
+                    const fileInput = document.createElement('input');
+                    fileInput.type = 'file';
+                    fileInput.accept = 'image/*';
+                    fileInput.onchange = function(e) {
+                        if (e.target.files.length > 0) {
+                            processImage(e.target.files[0]);
+                        }
+                    };
+                    fileInput.click();
+                });
+                
+                // 全局粘贴事件
+                document.addEventListener('paste', function(e) {
+                    if (e.clipboardData && e.clipboardData.items) {
+                        const items = e.clipboardData.items;
+                        for (let i = 0; i < items.length; i++) {
+                            if (items[i].type.indexOf('image') !== -1) {
+                                const blob = items[i].getAsFile();
+                                processImage(blob);
+                                e.preventDefault();
+                                return;
+                            }
+                        }
+                    }
+                });
+                
+                // 拖放事件
+                elements.pasteArea.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.style.borderColor = 'var(--primary)';
+                });
+                
+                elements.pasteArea.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.style.borderColor = 'var(--primary-light)';
+                });
+                
+                elements.pasteArea.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.style.borderColor = 'var(--primary-light)';
+                    
+                    if (e.dataTransfer.files.length > 0) {
+                        const file = e.dataTransfer.files[0];
+                        if (file.type.startsWith('image/')) {
+                            processImage(file);
+                        }
+                    }
+                });
+                
+                // 导入示例数据
+                elements.importDataBtn.addEventListener('click', function() {
+                    loadSampleData();
+                });
+                
+                // 导出数据
+                elements.exportDataBtn.addEventListener('click', function() {
+                    exportData();
+                });
+                
+                // 清除数据
+                elements.clearDataBtn.addEventListener('click', function() {
+                    if (confirm('确定要清除所有数据吗？此操作不可撤销。')) {
+                        promotionData = [];
+                        filteredData = [];
+                        selectedSeries.clear();
+                        renderTable();
+                        updateStats();
+                        updateFilterUI();
+                        showNotification('数据已清除', 'success');
+                    }
+                });
+                
+                // 清除筛选
+                elements.clearFiltersBtn.addEventListener('click', function() {
+                    clearFilters();
+                });
+                
+                // 系列筛选按钮
+                elements.seriesFilterBtn.addEventListener('click', function() {
+                    showSeriesFilterModal();
+                });
+                
+                // 率筛选变化
+                elements.registerFilter.addEventListener('change', applyFilters);
+                elements.rechargeFilter.addEventListener('change', applyFilters);
+            }
+            
+            // 初始化OCR引擎
+            async function initOCREngine() {
+                try {
+                    // 预加载OCR引擎
+                    elements.loadingText.textContent = '正在初始化OCR引擎...';
+                    elements.loadingOverlay.classList.add('active');
+                    
+                    ocrWorker = await Tesseract.createWorker('eng+chi_sim', 1, {
+                        workerPath: 'https://cdn.jsdelivr.net/npm/tesseract.js@5.0.0/dist/worker.min.js',
+                        logger: (m) => console.log('OCR初始化:', m)
+                    });
+                    
+                    elements.loadingOverlay.classList.remove('active');
+                    console.log('OCR引擎初始化完成');
+                } catch (error) {
+                    console.error('OCR引擎初始化失败:', error);
+                    elements.loadingOverlay.classList.remove('active');
+                    showNotification('OCR引擎初始化失败，请刷新页面重试', 'error');
+                }
+            }
+            
+            // 处理图片
+            async function processImage(imageBlob) {
+                if (!ocrWorker) {
+                    showNotification('OCR引擎正在初始化，请稍候...', 'warning');
+                    return;
+                }
+                
+                // 显示图片预览
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    elements.previewImage.innerHTML = `
+                        <img src="${e.target.result}" style="max-width: 100%; max-height: 200px; object-fit: contain;">
+                    `;
+                    elements.ocrProgress.style.display = 'block';
+                    elements.progressFill.style.width = '0%';
+                    elements.progressText.textContent = '正在加载图片...';
+                };
+                reader.readAsDataURL(imageBlob);
+                
+                // 显示加载动画
+                elements.loadingText.textContent = '正在识别图片数据...';
+                elements.loadingOverlay.classList.add('active');
+                
+                try {
+                    // 更新进度
+                    elements.progressFill.style.width = '20%';
+                    elements.progressText.textContent = '正在预处理图片...';
+                    
+                    // 使用Tesseract.js进行OCR识别
+                    const result = await ocrWorker.recognize(imageBlob, {
+                        logger: (m) => {
+                            if (m.status === 'recognizing text') {
+                                const progress = Math.round(m.progress * 80) + 20;
+                                elements.progressFill.style.width = `${progress}%`;
+                                elements.progressText.textContent = `识别进度: ${Math.round(m.progress * 100)}%`;
+                            }
+                        }
+                    });
+                    
+                    // 更新进度
+                    elements.progressFill.style.width = '100%';
+                    elements.progressText.textContent = '识别完成，正在解析数据...';
+                    
+                    // 处理识别到的文本
+                    processOCRText(result.data.text);
+                    
+                } catch (error) {
+                    console.error('OCR处理失败:', error);
+                    showNotification('图片识别失败，请确保图片清晰且包含表格数据。', 'error');
+                } finally {
+                    elements.loadingOverlay.classList.remove('active');
+                    elements.progressText.textContent = '识别完成';
+                    
+                    // 3秒后隐藏进度条
+                    setTimeout(() => {
+                        elements.ocrProgress.style.display = 'none';
+                    }, 3000);
+                }
+            }
+            
+            // 处理OCR文本
+            function processOCRText(text) {
+                console.log('OCR识别结果:', text);
+                
+                // 解析数据
+                const parsedData = parseOCRText(text);
+                
+                if (parsedData.length > 0) {
+                    // 添加到数据数组
+                    parsedData.forEach(item => {
+                        promotionData.push(item);
+                    });
+                    
+                    // 更新界面
+                    renderTable();
+                    updateStats();
+                    updateFilterUI();
+                    
+                    showNotification(`成功导入 ${parsedData.length} 条推广活动数据`, 'success');
+                } else {
+                    showNotification('未识别到有效数据，请确保图片包含完整的表格数据', 'warning');
+                }
+            }
+            
+            // 解析OCR文本 - 改进版
+            function parseOCRText(text) {
+                const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+                const data = [];
+                
+                // 查找表头行
+                let headerIndex = -1;
+                for (let i = 0; i < lines.length; i++) {
+                    if (lines[i].toLowerCase().includes('推广活动') || 
+                        (lines[i].includes('安装') && lines[i].includes('注册'))) {
+                        headerIndex = i;
+                        break;
+                    }
+                }
+                
+                // 如果没有找到表头，尝试其他模式
+                if (headerIndex === -1) {
+                    for (let i = 0; i < lines.length; i++) {
+                        // 检查是否是数据行（包含数字和连字符）
+                        if (lines[i].match(/\d+-\w+-APP\d+/) && lines[i].match(/\d+\s+\d+\s+\d+/)) {
+                            headerIndex = i - 1;
+                            if (headerIndex < 0) headerIndex = 0;
+                            break;
+                        }
+                    }
+                }
+                
+                // 从表头下一行开始解析数据
+                for (let i = headerIndex + 1; i < lines.length; i++) {
+                    const line = lines[i];
+                    
+                    // 跳过空行和总计行
+                    if (!line.trim() || 
+                        line.toLowerCase().includes('总计') || 
+                        line.toLowerCase().includes('合计') ||
+                        line.toLowerCase().includes('total')) {
+                        continue;
+                    }
+                    
+                    // 使用改进的正则表达式匹配数据
+                    // 匹配格式: 活动名称 数字 数字 数字
+                    const pattern = /([\w\d\-\[\]\s#]+?)\s+(\d+)\s+(\d+)\s+(\d+)/;
+                    const match = line.match(pattern);
+                    
+                    if (match) {
+                        const [, activityName, installStr, registerStr, rechargeStr] = match;
+                        const install = parseInt(installStr) || 0;
+                        const register = parseInt(registerStr) || 0;
+                        const firstrecharge = parseInt(rechargeStr) || 0;
+                        
+                        // 提取系列名称 - 保持完整格式
+                        const seriesName = extractSeriesName(activityName);
+                        
+                        // 计算率值
+                        const registerRate = install > 0 ? (register / install * 100).toFixed(2) : 0;
+                        const firstrechargeRate = register > 0 ? (firstrecharge / register * 100).toFixed(2) : 0;
+                        
+                        // 确定状态
+                        let status = '正常';
+                        if (registerRate < 60 || firstrechargeRate < 55) {
+                            status = '需优化';
+                        } else if (registerRate > 65 && firstrechargeRate > 60) {
+                            status = '优秀';
+                        }
+                        
+                        data.push({
+                            seriesName,
+                            originalName: activityName.trim(),
+                            install,
+                            register,
+                            firstrecharge,
+                            registerRate: parseFloat(registerRate),
+                            firstrechargeRate: parseFloat(firstrechargeRate),
+                            status
+                        });
+                    } else {
+                        // 尝试备选解析方案
+                        const altPattern = /([\w\d\-\[\]\s#]+?)\s+(\d+)\s+(\d+)/;
+                        const altMatch = line.match(altPattern);
+                        
+                        if (altMatch) {
+                            const [, activityName, installStr, registerStr] = altMatch;
+                            const install = parseInt(installStr) || 0;
+                            const register = parseInt(registerStr) || 0;
+                            const firstrecharge = 0; // 默认为0
+                            
+                            const seriesName = extractSeriesName(activityName);
+                            const registerRate = install > 0 ? (register / install * 100).toFixed(2) : 0;
+                            const firstrechargeRate = 0;
+                            
+                            let status = '正常';
+                            if (registerRate < 60) {
+                                status = '需优化';
+                            } else if (registerRate > 65) {
+                                status = '优秀';
+                            }
+                            
+                            data.push({
+                                seriesName,
+                                originalName: activityName.trim(),
+                                install,
+                                register,
+                                firstrecharge,
+                                registerRate: parseFloat(registerRate),
+                                firstrechargeRate: parseFloat(firstrechargeRate),
+                                status
+                            });
+                        }
+                    }
+                }
+                
+                return data;
+            }
+            
+            // 提取系列名称
+            function extractSeriesName(activityName) {
+                // 移除多余的空格
+                return activityName.replace(/\s+/g, ' ').trim();
+            }
+            
+            // 加载示例数据
+            function loadSampleData() {
+                const sampleData = [
+                    { seriesName: "92143-GG-APP034-[-3]-1203", install: 165, register: 99, firstrecharge: 62 },
+                    { seriesName: "92143-GG-APP033-[-3]-1203", install: 39, register: 22, firstrecharge: 14 },
+                    { seriesName: "92131-GG-APP033-[-3]-lee", install: 21, register: 7, firstrecharge: 7 },
+                    { seriesName: "92142-GG-APP034-[-3]-one #2", install: 21, register: 11, firstrecharge: 4 },
+                    { seriesName: "92142-GG-APP033-[-6]-one #2", install: 13, register: 3, firstrecharge: 2 },
+                    { seriesName: "92136-APP033-3-卡神-1202 #2", install: 1, register: 1, firstrecharge: 1 },
+                    { seriesName: "92142-GG-APP033-[-3]-one", install: 10, register: 6, firstrecharge: 1 },
+                    { seriesName: "GG92132-GG-APK033-[-3]-悦满意 #3", install: 3, register: 2, firstrecharge: 1 },
+                    { seriesName: "92131-GG-APP003-[-3]-叫啥呢二宝1203", install: 2, register: 0, firstrecharge: 0 },
+                    { seriesName: "92133-GG-APP001-[-3]-vv-1202-3-yx", install: 1, register: 0, firstrecharge: 0 },
+                    { seriesName: "92137-GG-APP033-西瓜", install: 1, register: 0, firstrecharge: 0 },
+                    { seriesName: "92137-GG-APP033-西瓜124", install: 1, register: 0, firstrecharge: 0 },
+                    { seriesName: "92137-GG-APP034-西瓜124", install: 2, register: 1, firstrecharge: 0 },
+                    { seriesName: "92142-GG-APP034-[-3]-one", install: 2, register: 2, firstrecharge: 0 },
+                    { seriesName: "GG92132-GG-APK033-[-3]-悦满意", install: 2, register: 1, firstrecharge: 0 },
+                    { seriesName: "GG92132-GG-APK033-[-3]-悦满意 #2", install: 3, register: 1, firstrecharge: 0 },
+                    { seriesName: "GG92132-GG-APK034-[-3]-悦满意 #2", install: 1, register: 0, firstrecharge: 0 },
+                    { seriesName: "GG92132-GG-APK034-[-3]-悦满意 #3", install: 1, register: 0, firstrecharge: 0 }
+                ];
+                
+                // 清空现有数据
+                promotionData = [];
+                
+                // 计算率值和状态
+                sampleData.forEach(item => {
+                    const registerRate = item.install > 0 ? (item.register / item.install * 100).toFixed(2) : 0;
+                    const firstrechargeRate = item.register > 0 ? (item.firstrecharge / item.register * 100).toFixed(2) : 0;
+                    
+                    let status = '正常';
+                    if (registerRate < 60 || firstrechargeRate < 55) {
+                        status = '需优化';
+                    } else if (registerRate > 65 && firstrechargeRate > 60) {
+                        status = '优秀';
+                    }
+                    
+                    promotionData.push({
+                        seriesName: item.seriesName,
+                        originalName: item.seriesName,
+                        install: item.install,
+                        register: item.register,
+                        firstrecharge: item.firstrecharge,
+                        registerRate: parseFloat(registerRate),
+                        firstrechargeRate: parseFloat(firstrechargeRate),
+                        status
+                    });
+                });
+                
+                // 更新界面
+                renderTable();
+                updateStats();
+                updateFilterUI();
+                
+                showNotification(`成功导入 ${promotionData.length} 条示例数据`, 'success');
+            }
+            
+            // 渲染表格
+            function renderTable() {
+                // 清除现有行
+                elements.tableBody.innerHTML = '';
+                
+                const dataToRender = filteredData.length > 0 ? filteredData : promotionData;
+                
+                if (dataToRender.length === 0) {
+                    elements.tableBody.appendChild(elements.noDataRow.cloneNode(true));
+                    return;
+                }
+                
+                // 计算总计
+                const totals = {
+                    install: 0,
+                    register: 0,
+                    firstrecharge: 0
+                };
+                
+                // 渲染数据行
+                dataToRender.forEach((activity, index) => {
+                    // 累加总计
+                    totals.install += activity.install;
+                    totals.register += activity.register;
+                    totals.firstrecharge += activity.firstrecharge;
+                    
+                    const row = document.createElement('tr');
+                    
+                    // 注册率颜色类
+                    let registerRateClass = '';
+                    if (activity.registerRate < 60) registerRateClass = 'low-register';
+                    else if (activity.registerRate > 65) registerRateClass = 'high-register';
+                    
+                    // 首充率颜色类
+                    let firstrechargeRateClass = '';
+                    if (activity.firstrechargeRate < 55) firstrechargeRateClass = 'low-firstrecharge';
+                    else if (activity.firstrechargeRate > 60) firstrechargeRateClass = 'high-firstrecharge';
+                    
+                    row.innerHTML = `
+                        <td class="tooltip">
+                            ${activity.seriesName}
+                            <span class="tooltiptext">原始名称: ${activity.originalName}</span>
+                        </td>
+                        <td>${activity.install.toLocaleString()}</td>
+                        <td>${activity.register.toLocaleString()}</td>
+                        <td>${activity.firstrecharge.toLocaleString()}</td>
+                        <td class="${registerRateClass}">${activity.registerRate.toFixed(2)}%</td>
+                        <td class="${firstrechargeRateClass}">${activity.firstrechargeRate.toFixed(2)}%</td>
+                        <td><span class="status-cell status-${activity.status}">${activity.status}</span></td>
+                    `;
+                    
+                    elements.tableBody.appendChild(row);
+                });
+                
+                // 添加总计行
+                const totalRow = document.createElement('tr');
+                totalRow.className = 'total-row';
+                
+                const totalRegisterRate = totals.install > 0 ? (totals.register / totals.install * 100).toFixed(2) : 0;
+                const totalFirstrechargeRate = totals.register > 0 ? (totals.firstrecharge / totals.register * 100).toFixed(2) : 0;
+                
+                totalRow.innerHTML = `
+                    <td><strong>总计</strong></td>
+                    <td><strong>${totals.install.toLocaleString()}</strong></td>
+                    <td><strong>${totals.register.toLocaleString()}</strong></td>
+                    <td><strong>${totals.firstrecharge.toLocaleString()}</strong></td>
+                    <td><strong>${totalRegisterRate}%</strong></td>
+                    <td><strong>${totalFirstrechargeRate}%</strong></td>
+                    <td><strong>汇总</strong></td>
+                `;
+                
+                elements.tableBody.appendChild(totalRow);
+                
+                // 添加排序功能
+                addSortingListeners();
+                
+                // 更新筛选计数
+                updateFilterCounts();
+            }
+            
+            // 更新统计
+            function updateStats() {
+                const dataToCalculate = filteredData.length > 0 ? filteredData : promotionData;
+                
+                if (dataToCalculate.length === 0) {
+                    elements.totalInstalls.textContent = '0';
+                    elements.totalRegisters.textContent = '0';
+                    elements.totalRecharges.textContent = '0';
+                    elements.registerRate.textContent = '0%';
+                    elements.rechargeRate.textContent = '0%';
+                    return;
+                }
+                
+                // 计算总计
+                const totals = {
+                    install: 0,
+                    register: 0,
+                    firstrecharge: 0
+                };
+                
+                dataToCalculate.forEach(item => {
+                    totals.install += item.install;
+                    totals.register += item.register;
+                    totals.firstrecharge += item.firstrecharge;
+                });
+                
+                // 计算率值
+                const totalRegisterRate = totals.install > 0 ? (totals.register / totals.install * 100).toFixed(2) : 0;
+                const totalFirstrechargeRate = totals.register > 0 ? (totals.firstrecharge / totals.register * 100).toFixed(2) : 0;
+                
+                // 更新显示
+                elements.totalInstalls.textContent = totals.install.toLocaleString();
+                elements.totalRegisters.textContent = totals.register.toLocaleString();
+                elements.totalRecharges.textContent = totals.firstrecharge.toLocaleString();
+                elements.registerRate.textContent = `${totalRegisterRate}%`;
+                elements.rechargeRate.textContent = `${totalFirstrechargeRate}%`;
+                
+                // 更新数据计数
+                elements.totalDataCount.textContent = promotionData.length;
+                elements.filteredDataCount.textContent = filteredData.length > 0 ? filteredData.length : promotionData.length;
+            }
+            
+            // 显示系列筛选模态框
+            function showSeriesFilterModal() {
+                const uniqueSeries = [...new Set(promotionData.map(item => item.seriesName))].sort();
+                
+                if (uniqueSeries.length === 0) {
+                    showNotification('没有可筛选的数据', 'warning');
+                    return;
+                }
+                
+                // 创建模态框
+                const modal = document.createElement('div');
+                modal.className = 'filter-modal';
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000;
+                    padding: 2rem;
+                    backdrop-filter: blur(4px);
+                `;
+                
+                modal.innerHTML = `
+                    <div style="background: white; border-radius: var(--radius); width: 90%; max-width: 800px; max-height: 80vh; display: flex; flex-direction: column; box-shadow: var(--shadow-xl); overflow: hidden;">
+                        <div style="padding: 1.5rem 2rem; background: var(--primary); color: white; display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 0.75rem;">
+                                <i class="fas fa-filter"></i>
+                                选择系列名称 (${uniqueSeries.length}个)
+                            </h3>
+                            <button id="closeModalBtn" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 0.5rem; border-radius: var(--radius-sm); cursor: pointer;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div style="padding: 1.5rem 2rem; border-bottom: 1px solid var(--gray-200); background: var(--gray-50);">
+                            <div style="display: flex; gap: 1rem; align-items: center;">
+                                <input type="text" id="seriesSearch" placeholder="搜索系列名称..." style="flex: 1; padding: 0.875rem 1.25rem; border: 2px solid var(--gray-200); border-radius: var(--radius-md); font-size: 0.9375rem;">
+                                <button id="selectAllBtn" class="btn" style="padding: 0.75rem 1.25rem;">
+                                    <i class="fas fa-check-double"></i> 全选
+                                </button>
+                                <button id="deselectAllBtn" class="btn" style="padding: 0.75rem 1.25rem;">
+                                    <i class="fas fa-times-circle"></i> 取消全选
+                                </button>
+                            </div>
+                        </div>
+                        <div id="seriesOptions" style="flex: 1; overflow-y: auto; padding: 1.5rem 2rem; max-height: 400px;">
+                            <!-- 选项将在这里动态添加 -->
+                        </div>
+                        <div style="padding: 1.5rem 2rem; border-top: 1px solid var(--gray-200); background: var(--gray-50); display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-size: 0.9375rem; color: var(--gray-600);">
+                                已选择 <span id="selectedCount">${selectedSeries.size}</span> 个系列名称
+                            </div>
+                            <div style="display: flex; gap: 1rem;">
+                                <button id="cancelBtn" class="btn" style="padding: 0.75rem 1.5rem;">
+                                    取消
+                                </button>
+                                <button id="confirmBtn" class="btn btn-success" style="padding: 0.75rem 1.5rem;">
+                                    <i class="fas fa-check"></i> 完成
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                // 添加选项
+                const seriesOptions = modal.querySelector('#seriesOptions');
+                uniqueSeries.forEach(series => {
+                    const option = document.createElement('div');
+                    option.className = 'filter-option-checkbox';
+                    option.style.cssText = `
+                        display: flex;
+                        align-items: center;
+                        gap: 0.75rem;
+                        padding: 0.875rem 1rem;
+                        border: 1px solid var(--gray-200);
+                        border-radius: var(--radius-sm);
+                        cursor: pointer;
+                        transition: var(--transition);
+                        margin-bottom: 0.5rem;
+                        ${selectedSeries.has(series) ? 'border-color: var(--primary); background: rgba(59, 130, 246, 0.05);' : ''}
+                    `;
+                    
+                    option.innerHTML = `
+                        <div style="width: 20px; height: 20px; border: 2px solid ${selectedSeries.has(series) ? 'var(--primary)' : 'var(--gray-300)'}; border-radius: 4px; display: flex; align-items: center; justify-content: center; ${selectedSeries.has(series) ? 'background: var(--primary);' : ''}">
+                            ${selectedSeries.has(series) ? '<span style="color: white; font-size: 0.75rem;">✓</span>' : ''}
+                        </div>
+                        <label style="flex: 1; cursor: pointer; font-size: 0.9375rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${series}</label>
+                    `;
+                    
+                    option.addEventListener('click', function() {
+                        const isSelected = selectedSeries.has(series);
+                        if (isSelected) {
+                            selectedSeries.delete(series);
+                        } else {
+                            selectedSeries.add(series);
+                        }
+                        
+                        // 更新UI
+                        const checkmark = this.querySelector('div');
+                        const label = this.querySelector('label').nextSibling;
+                        
+                        if (selectedSeries.has(series)) {
+                            this.style.borderColor = 'var(--primary)';
+                            this.style.background = 'rgba(59, 130, 246, 0.05)';
+                            checkmark.style.borderColor = 'var(--primary)';
+                            checkmark.style.background = 'var(--primary)';
+                            checkmark.innerHTML = '<span style="color: white; font-size: 0.75rem;">✓</span>';
+                        } else {
+                            this.style.borderColor = 'var(--gray-200)';
+                            this.style.background = 'white';
+                            checkmark.style.borderColor = 'var(--gray-300)';
+                            checkmark.style.background = 'white';
+                            checkmark.innerHTML = '';
+                        }
+                        
+                        // 更新计数
+                        modal.querySelector('#selectedCount').textContent = selectedSeries.size;
+                    });
+                    
+                    seriesOptions.appendChild(option);
+                });
+                
+                // 搜索功能
+                const searchInput = modal.querySelector('#seriesSearch');
+                searchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const options = seriesOptions.querySelectorAll('.filter-option-checkbox');
+                    
+                    options.forEach(option => {
+                        const label = option.querySelector('label').textContent.toLowerCase();
+                        if (searchTerm === '' || label.includes(searchTerm)) {
+                            option.style.display = 'flex';
+                        } else {
+                            option.style.display = 'none';
+                        }
+                    });
+                });
+                
+                // 全选/取消全选
+                modal.querySelector('#selectAllBtn').addEventListener('click', function() {
+                    uniqueSeries.forEach(series => {
+                        selectedSeries.add(series);
+                    });
+                    updateModalOptions();
+                    modal.querySelector('#selectedCount').textContent = selectedSeries.size;
+                });
+                
+                modal.querySelector('#deselectAllBtn').addEventListener('click', function() {
+                    selectedSeries.clear();
+                    updateModalOptions();
+                    modal.querySelector('#selectedCount').textContent = selectedSeries.size;
+                });
+                
+                // 关闭按钮
+                modal.querySelector('#closeModalBtn').addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                });
+                
+                // 取消按钮
+                modal.querySelector('#cancelBtn').addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                });
+                
+                // 确认按钮
+                modal.querySelector('#confirmBtn').addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                    applyFilters();
+                });
+                
+                // 点击外部关闭
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        document.body.removeChild(modal);
+                    }
+                });
+                
+                // 更新模态框选项
+                function updateModalOptions() {
+                    const options = seriesOptions.querySelectorAll('.filter-option-checkbox');
+                    options.forEach(option => {
+                        const label = option.querySelector('label').textContent;
+                        const isSelected = selectedSeries.has(label);
+                        const checkmark = option.querySelector('div');
+                        
+                        if (isSelected) {
+                            option.style.borderColor = 'var(--primary)';
+                            option.style.background = 'rgba(59, 130, 246, 0.05)';
+                            checkmark.style.borderColor = 'var(--primary)';
+                            checkmark.style.background = 'var(--primary)';
+                            checkmark.innerHTML = '<span style="color: white; font-size: 0.75rem;">✓</span>';
+                        } else {
+                            option.style.borderColor = 'var(--gray-200)';
+                            option.style.background = 'white';
+                            checkmark.style.borderColor = 'var(--gray-300)';
+                            checkmark.style.background = 'white';
+                            checkmark.innerHTML = '';
+                        }
+                    });
+                }
+                
+                // 聚焦搜索框
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 100);
+            }
+            
+            // 应用筛选
+            function applyFilters() {
+                // 更新筛选计数
+                elements.seriesSelectedCount.textContent = selectedSeries.size;
+                
+                // 应用筛选
+                filteredData = promotionData.filter(item => {
+                    // 系列名称筛选
+                    if (selectedSeries.size > 0 && !selectedSeries.has(item.seriesName)) {
+                        return false;
+                    }
+                    
+                    // 注册率筛选
+                    const registerFilterValue = elements.registerFilter.value;
+                    if (registerFilterValue !== 'all') {
+                        if (registerFilterValue === 'high' && item.registerRate <= 65) return false;
+                        if (registerFilterValue === 'normal' && (item.registerRate < 60 || item.registerRate > 65)) return false;
+                        if (registerFilterValue === 'low' && item.registerRate >= 60) return false;
+                    }
+                    
+                    // 首充率筛选
+                    const rechargeFilterValue = elements.rechargeFilter.value;
+                    if (rechargeFilterValue !== 'all') {
+                        if (rechargeFilterValue === 'high' && item.firstrechargeRate <= 60) return false;
+                        if (rechargeFilterValue === 'normal' && (item.firstrechargeRate < 55 || item.firstrechargeRate > 60)) return false;
+                        if (rechargeFilterValue === 'low' && item.firstrechargeRate >= 55) return false;
+                    }
+                    
+                    return true;
+                });
+                
+                renderTable();
+                updateStats();
+                
+                if (filteredData.length > 0) {
+                    showNotification(`已应用筛选条件，显示 ${filteredData.length} 条数据`, 'info');
+                }
+            }
+            
+            // 清除筛选
+            function clearFilters() {
+                selectedSeries.clear();
+                elements.registerFilter.value = 'all';
+                elements.rechargeFilter.value = 'all';
+                
+                filteredData = [];
+                
+                // 更新UI
+                elements.seriesSelectedCount.textContent = '0';
+                
+                renderTable();
+                updateStats();
+                
+                showNotification('筛选条件已清除', 'info');
+            }
+            
+            // 更新筛选UI
+            function updateFilterUI() {
+                elements.seriesSelectedCount.textContent = selectedSeries.size;
+            }
+            
+            // 更新筛选计数
+            function updateFilterCounts() {
+                elements.totalDataCount.textContent = promotionData.length;
+                elements.filteredDataCount.textContent = filteredData.length > 0 ? filteredData.length : promotionData.length;
+            }
+            
+            // 添加排序监听器
+            function addSortingListeners() {
+                document.querySelectorAll('th').forEach((th, index) => {
+                    th.addEventListener('click', () => {
+                        sortTable(index);
+                    });
+                });
+            }
+            
+            // 排序表格
+            function sortTable(columnIndex) {
+                const dataToSort = filteredData.length > 0 ? filteredData : promotionData;
+                if (dataToSort.length === 0) return;
+                
+                // 如果点击的是同一列，切换排序方向
+                if (currentSortColumn === columnIndex) {
+                    currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSortColumn = columnIndex;
+                    currentSortDirection = 'asc';
+                }
+                
+                // 根据列索引确定排序属性
+                let sortProperty;
+                switch (columnIndex) {
+                    case 0: sortProperty = 'seriesName'; break;
+                    case 1: sortProperty = 'install'; break;
+                    case 2: sortProperty = 'register'; break;
+                    case 3: sortProperty = 'firstrecharge'; break;
+                    case 4: sortProperty = 'registerRate'; break;
+                    case 5: sortProperty = 'firstrechargeRate'; break;
+                    case 6: sortProperty = 'status'; break;
+                    default: return;
+                }
+                
+                // 排序数据
+                if (filteredData.length > 0) {
+                    filteredData.sort((a, b) => {
+                        return compareValues(a[sortProperty], b[sortProperty]);
+                    });
+                } else {
+                    promotionData.sort((a, b) => {
+                        return compareValues(a[sortProperty], b[sortProperty]);
+                    });
+                }
+                
+                // 重新渲染表格
+                renderTable();
+                
+                // 更新排序指示器
+                updateSortIndicator(columnIndex);
+            }
+            
+            function compareValues(a, b) {
+                if (typeof a === 'number' && typeof b === 'number') {
+                    return currentSortDirection === 'asc' ? a - b : b - a;
+                } else {
+                    const aStr = String(a).toLowerCase();
+                    const bStr = String(b).toLowerCase();
+                    return currentSortDirection === 'asc' 
+                        ? aStr.localeCompare(bStr)
+                        : bStr.localeCompare(aStr);
+                }
+            }
+            
+            // 更新排序指示器
+            function updateSortIndicator(columnIndex) {
+                document.querySelectorAll('th').forEach(th => {
+                    th.classList.remove('sorted');
+                    const icon = th.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fas fa-sort';
+                    }
+                });
+                
+                const header = document.querySelectorAll('th')[columnIndex];
+                if (header) {
+                    header.classList.add('sorted');
+                    const icon = header.querySelector('i');
+                    if (icon) {
+                        icon.className = currentSortDirection === 'asc' 
+                            ? 'fas fa-sort-up' 
+                            : 'fas fa-sort-down';
+                    }
+                }
+            }
+            
+            // 导出数据
+            function exportData() {
+                const dataToExport = filteredData.length > 0 ? filteredData : promotionData;
+                
+                if (dataToExport.length === 0) {
+                    showNotification('没有数据可导出', 'warning');
+                    return;
+                }
+                
+                const csvContent = [
+                    ['系列名称', '安装', '注册', '首充', '注册率', '首充率', '状态'].join(','),
+                    ...dataToExport.map(item => [
+                        `"${item.seriesName}"`,
+                        item.install,
+                        item.register,
+                        item.firstrecharge,
+                        item.registerRate.toFixed(2) + '%',
+                        item.firstrechargeRate.toFixed(2) + '%',
+                        item.status
+                    ].join(','))
+                ].join('\n');
+                
+                const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `推广数据_${new Date().toISOString().slice(0,10)}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showNotification(`成功导出 ${dataToExport.length} 条数据`, 'success');
+            }
+            
+            // 显示通知
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                
+                const icon = type === 'success' ? 'check-circle' : 
+                           type === 'error' ? 'exclamation-circle' : 
+                           type === 'warning' ? 'exclamation-triangle' : 'info-circle';
+                
+                notification.innerHTML = `
+                    <i class="fas fa-${icon}"></i>
+                    <span>${message}</span>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) reverse';
+                    setTimeout(() => {
+                        if (document.body.contains(notification)) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 400);
+                }, 3000);
+            }
+            
+            // 加载示例数据
+            setTimeout(() => {
+                loadSampleData();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
